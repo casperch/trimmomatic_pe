@@ -1,0 +1,12 @@
+read_path: reads
+
+# list of trimmers (see manual)
+trimmer: 
+  - "ILLUMINACLIP:resources/adapters/TruSeq3-PE.fa:2:30:10"
+  - "LEADING:3"
+  - "TRAILING:3"
+  - "SLIDINGWINDOW:4:15"
+  - "MINLEN:36"
+
+sample:
+  - sample1

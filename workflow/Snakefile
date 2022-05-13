@@ -1,0 +1,45 @@
+import os
+
+rule all:
+    input: 
+        r1=expand("results/trimmed/{sample}.1.fastq.gz", sample=config['sample']),
+        r2=expand("results/trimmed/{sample}.2.fastq.gz", sample=config['sample']),
+        # reads where trimming entirely removed the mate
+        r1_unpaired=expand("results/trimmed/{sample}.1.unpaired.fastq.gz", sample=config['sample']),
+        r2_unpaired=expand("results/trimmed/{sample}.2.unpaired.fastq.gz", sample=config['sample'])
+
+
+rule trimmomatic_pe:
+    input: 
+        r1=os.path.join(config['read_path'], "{sample}.1.fastq.gz"),
+        r2=os.path.join(config['read_path'], "{sample}.2.fastq.gz")
+    output: 
+        r1="results/trimmed/{sample}.1.fastq.gz",
+        r2="results/trimmed/{sample}.2.fastq.gz",
+        # reads where trimming entirely removed the mate
+        r1_unpaired="results/trimmed/{sample}.1.unpaired.fastq.gz",
+        r2_unpaired="results/trimmed/{sample}.2.unpaired.fastq.gz"
+    log:
+        "logs/trimmomatic/{sample}.log"
+    params:
+        # list of trimmers (see manual)
+        trimmer=config['trimmer'],
+        # optional parameters
+        java_opts="",
+        extra=""
+    threads:
+        8
+    resources:
+        mem_mb=1024
+    conda:   
+        "envs/trimmomatic.yaml"
+    envmodules:
+        'trimmomatic/0.39'
+    shell: 
+        "trimmomatic PE -threads {threads} {params.java_opts} {params.extra} "
+        "{input.r1} {input.r2} "
+        "{output.r1} {output.r1_unpaired} "
+        "{output.r2} {output.r2_unpaired} "
+        "{params.trimmer} "
+        " 2> {log}"
+
