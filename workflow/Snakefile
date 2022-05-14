@@ -1,12 +1,14 @@
 import os
 
+sample = list(config.get('sample'))
+
 rule all:
     input: 
-        r1=expand("results/trimmed/{sample}.1.fastq.gz", sample=config.get('sample')),
-        r2=expand("results/trimmed/{sample}.2.fastq.gz", sample=config.get('sample')),
+        r1=expand("results/trimmed/{sample}.1.fastq.gz", sample=sample),
+        r2=expand("results/trimmed/{sample}.2.fastq.gz", sample=sample),
         # reads where trimming entirely removed the mate
-        r1_unpaired=expand("results/trimmed/{sample}.1.unpaired.fastq.gz", sample=config.get('sample')),
-        r2_unpaired=expand("results/trimmed/{sample}.2.unpaired.fastq.gz", sample=config.get('sample'))
+        r1_unpaired=expand("results/trimmed/{sample}.1.unpaired.fastq.gz", sample=sample),
+        r2_unpaired=expand("results/trimmed/{sample}.2.unpaired.fastq.gz", sample=sample)
 
 
 rule trimmomatic_pe:
