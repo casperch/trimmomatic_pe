@@ -11,8 +11,8 @@ rule all:
 
 rule trimmomatic_pe:
     input: 
-        r1=os.path.join(config['read_path'], "{sample}.1.fastq.gz"),
-        r2=os.path.join(config['read_path'], "{sample}.2.fastq.gz")
+        r1=os.path.join(config.get('read_path'), "{sample}.1.fastq.gz"),
+        r2=os.path.join(config.get('read_path'), "{sample}.2.fastq.gz")
     output: 
         r1="results/trimmed/{sample}.1.fastq.gz",
         r2="results/trimmed/{sample}.2.fastq.gz",
@@ -23,7 +23,7 @@ rule trimmomatic_pe:
         "logs/trimmomatic/{sample}.log"
     params:
         # list of trimmers (see manual)
-        trimmer=config['trimmer'],
+        trimmer=config.get('trimmer'),
         # optional parameters
         java_opts="",
         extra=""
